@@ -42,7 +42,7 @@ This dashboard provides real-time event analytics by:
    npm install
    npm run dev
 
-2. **Start the Backend**
+2. **Start the Frontend**
 
    ```bash
    cd frontend
