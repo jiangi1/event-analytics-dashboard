@@ -29,3 +29,25 @@ This dashboard provides real-time event analytics by:
 - **Backend:** Node.js, Express, TypeScript
 - **Styling:** CSS3 with Neumorphism design
 - **HTTP Client:** Axios
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/jiangi1/event-analytics-dashboard.git
+   cd event-analytics-dashboard
+
+2. **Start the Backend**
+
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+
+2. **Start the Backend**
+
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+
+## Live Demo Note
+  The live website at https://jiangi1.github.io/event-analytics-dashboard/ shows the UI design only. Please run the project locally using the instructions above to see the fully functional dashboard with data.
