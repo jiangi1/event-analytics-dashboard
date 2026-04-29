@@ -35,7 +35,8 @@ interface AnalyticsData {
   }>;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+// Pastel colors for the pie chart only
+const COLORS = ['#FFB3BA', '#B5EAD7', '#C7CEEA', '#FFDAC1', '#E2F0CB', '#FFC8DD', '#D4F1F9'];
 
 function App() {
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -72,7 +73,7 @@ function App() {
       });
 
       alert('Event sent successfully!');
-      fetchAnalytics(); // Refresh data
+      fetchAnalytics();
       setEventType('');
       setEventProperties('{}');
     } catch (error) {
@@ -83,7 +84,6 @@ function App() {
 
   useEffect(() => {
     fetchAnalytics();
-    // Refresh every 10 seconds
     const interval = setInterval(fetchAnalytics, 10000);
     return () => clearInterval(interval);
   }, [days]);
@@ -96,7 +96,6 @@ function App() {
     return <div className="error">Failed to load data</div>;
   }
 
-  // Prepare pie chart data
   const pieData = Object.entries(data.eventsByType).map(([name, value]) => ({
     name,
     value
@@ -142,13 +141,30 @@ function App() {
         <div className="chart-card">
           <h2>Events Over Time</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data.timeSeriesData}>
+            <LineChart data={data.timeSeriesData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
+              <XAxis 
+                dataKey="date" 
+                interval={0}
+                tick={{ fontSize: 11 }}
+                angle={data.timeSeriesData.length === 1 ? 0 : -20}
+                textAnchor="end"
+                height={50}
+              />
+              <YAxis 
+                allowDecimals={false}
+                domain={[0, 'auto']}
+              />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" />
+              <Line 
+                type="monotone" 
+                dataKey="count" 
+                stroke="#a8edea" 
+                strokeWidth={2}
+                dot={{ r: 4, fill: "#a8edea" }}
+                activeDot={{ r: 6 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -156,13 +172,13 @@ function App() {
         <div className="chart-card">
           <h2>Events by Type</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={pieData}>
+            <BarChart data={pieData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#82ca9d" />
+              <Bar dataKey="value" fill="#a8edea" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -208,9 +224,13 @@ function App() {
               {data.recentEvents.map((event) => (
                 <tr key={event.id}>
                   <td>{new Date(event.timestamp).toLocaleString()}</td>
-                  <td><span className="event-badge">{event.eventType}</span></td>
+                  <td>
+                    <span className="event-badge">{event.eventType}</span>
+                  </td>
                   <td>{event.userId}</td>
-                  <td><pre>{JSON.stringify(event.properties, null, 2)}</pre></td>
+                  <td>
+                    <pre>{JSON.stringify(event.properties, null, 2)}</pre>
+                  </td>
                 </tr>
               ))}
             </tbody>
